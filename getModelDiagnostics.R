@@ -8,6 +8,7 @@
 getModelDiagnostics <- function(mod, top.x = 10) {
   require(data.table)
   require(stringr)
+  require(sybil)
   
   sybil::SYBIL_SETTINGS("SOLVER","cplexAPI"); ok <- 1
   
@@ -54,6 +55,8 @@ getModelDiagnostics <- function(mod, top.x = 10) {
 }
 
 getReducedCosts <- function(mod) {
+  require(sybil)
+  
   nrxns <- as.character(react_num(mod)-1)
   
   opt <- optimizeProb(mod,
