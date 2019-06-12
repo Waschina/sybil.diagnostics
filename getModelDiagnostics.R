@@ -38,15 +38,15 @@ getModelDiagnostics <- function(mod, top.x = 10) {
   cat("\n")
   
   cat("Top", top.x, "reactions with the lowest reduced costs:\n\n")
-  print(huch$rxn.info[order(red.costs)][1:top.x])
+  print(rxn.info[order(red.costs)][1:top.x])
   cat("\n")
   
   cat("Top", top.x, "exchange reactions with the lowest reduced costs:\n\n")
-  print(huch$rxn.info[grepl("^EX", id)][order(red.costs)][1:top.x])
+  print(rxn.info[grepl("^EX", id)][order(red.costs)][1:top.x])
   cat("\n")
   
   cat("Top", top.x, "exchange reactions with flux < 0 (i.e. uptake) and the lowest reduced costs:\n\n")
-  print(huch$rxn.info[grepl("^EX", id) & flux < 0][order(red.costs)][1:top.x])
+  print(rxn.info[grepl("^EX", id) & flux < 0][order(red.costs)][1:top.x])
   cat("\n")
   
   return(list(met.info = met.info,
