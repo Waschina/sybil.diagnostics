@@ -5,9 +5,6 @@
 #' @return A list for the test results of \code{mod}. List item \code{rxn.info} returns results obtained for individual 
 #'   reactions. Columns include besides identifiers the predcited flux and the reduced costs. List item \code{met.info}
 #'   contains only identfiers at the moment, but will be extented soon.
-#' @examples
-#' add(1, 1)
-#' add(10, 1)
 getModelDiagnostics <- function(mod, top.x = 10) {
   require(data.table)
   require(stringr)
