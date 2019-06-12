@@ -52,3 +52,16 @@ getModelDiagnostics <- function(mod, top.x = 10) {
   return(list(met.info = met.info,
               rxn.info = rxn.info))
 }
+
+getReducedCosts <- function(mod) {
+  nrxns <- as.character(react_num(mod)-1)
+  
+  opt <- optimizeProb(mod,
+                      solver = "cplexAPI",
+                      #prCmd = list(c("getColsLowBnds", "LP_PROB", "1:77")),
+                      poCmd = list(c("getDjCPLEX","LP_PROB@oobj@env","LP_PROB@oobj@lp","0", nrxns)))
+  rc <- postProc(opt)
+  rc <- rc@pa[[1]]
+  
+  return(rc)
+}
