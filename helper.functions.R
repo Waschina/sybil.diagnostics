@@ -142,3 +142,35 @@ printReact.2 <- function(mod, react, printOut = FALSE, ...) {
   return(reaction)
   
 }
+
+
+get.fluxvar.all.reactions <- function(mod) {
+  sol <- sybil::optimizeProb(mod, algorithm = "mtf")
+  
+  dt <- data.table(rxn      = mod@react_id, 
+                   name     = mod@react_name,
+                   mtf.flux = sol@fluxdist@fluxes[1:mod@react_num])
+  
+  # Add EC information if there
+  if("ec" %in% colnames(mod@react_attr))
+    dt$ec <- mod@react_attr$ec
+  
+  
+  dt$equation <- printReact.2(mod, react = mod@react_id)
+  
+  # get FV solution
+  sol.fv <- fluxVar(mod, react = mod@react_id)
+  
+  dt.fv <- data.table(rxn  = rep(mod@react_id,2),
+                      dir  = c(rep("l",length(mod@react_id)),rep("u",length(mod@react_id))),
+                      fv   = sol.fv@lp_obj)
+  dt.fv <- dcast(dt.fv, rxn ~ dir, value.var = "fv")
+  
+  dt <- merge(dt, dt.fv, by = "rxn")
+  
+  dt[abs(mtf.flux) < 1e-10, mtf.flux := 0]
+  dt[abs(l)        < 1e-10, l        := 0]
+  dt[abs(u)        < 1e-10, u        := 0]
+  
+  return(dt)
+}
